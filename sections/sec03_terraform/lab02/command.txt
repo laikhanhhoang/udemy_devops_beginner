@@ -1,5 +1,5 @@
 #Generate keypair using ssh
-ssh-keygen -t rsa -b 4096 -C "laikhanhhoang3011ks@gmail.com"
+ssh-keygen -t rsa -b 4096 -C "laikhanhhoang3011@gmail.com"
 
 #Enter path for new key: example ./keypair/udemy-key
 

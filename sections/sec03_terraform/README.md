@@ -34,13 +34,17 @@
     <i>Version Control ở đây là Github/GitLab. Ta có thể trao cho các <b>Verson Control Software quyền IAM</b>  để <b>update resource</b></i>
 </div>
 
+---
+
+<br><br>
+
 ## 2. Terraform
 ### 2.1. Cơ chế hoạt động của Terraform
 
 -   **Khởi tạo (Init) - `terraform init`**: Terraform thực hiện **tải các Plugins/Providers** cần thiết và **thiết lập thư mục làm việc** để sẵn sàng kết nối với Cloud.
 -   **Kế hoạch (Plan) - `terraform plan`**: Terraform **tự quét** qua các file **.tf** code bạn viết **so sánh với trạng thái thực tế** $\rightarrow$ **Tạo bản kế hoạch** những gì sẽ được **thêm, sửa, hoặc xóa**. Nó đủ thông minh để biết thứ tự tạo ra các resource.
 -   **Thực thi (Apply) - `terraform apply`**: Terraform gửi các yêu cầu đến **API của nhà cung cấp Cloud** $\rightarrow$ **Triển khai hạ tầng** đúng như bản kế hoạch đã phê duyệt.
-    -   **Lưu trữ (State) - `.tfstate`**: Terraform tự động **ghi nhớ thông số hạ tầng** vào tệp trạng thái $\rightarrow$ Làm căn cứ duy nhất để **đối chiếu và quản lý** cho các lần thay đổi sau.
+-   **Lưu trữ (State) - `.tfstate`**: Terraform tự động **ghi nhớ thông số hạ tầng** vào tệp trạng thái $\rightarrow$ Làm căn cứ duy nhất để **đối chiếu và quản lý** cho các lần thay đổi sau.
 -   **Hủy bỏ (Destroy) - `terraform destroy`**: Terraform đối chiếu tệp State để **xác định các tài nguyên** hiện có $\rightarrow$ **Xóa bỏ toàn bộ hạ tầng** đã được quản lý bởi cấu hình đó.
 
 **Luồng xử lý (Workflow) đầy đủ:**
@@ -58,6 +62,9 @@ $\text{Write Code} \rightarrow \text{init} \rightarrow \text{plan} \rightarrow \
     <br>
 </div>
 
+---
+
+<br><br>
 
 ## 3. Lưu ý
 - Luôn thực hiện **`terraform plan`** trước khi **`terraform apply`** và chú ý ký hiệu **-/+ (destroy and replacement)**.
@@ -70,6 +77,19 @@ $\text{Write Code} \rightarrow \text{init} \rightarrow \text{plan} \rightarrow \
         <br>
     </div>
 
+- Truyền giá trị Variable
+    - Với **mỗi Variable** được khai báo, **kể cả biến đó không được dùng** trong **`main.tf`**:
+        - Nếu thiếu `--var-file`, Terraform tìm file `terraform.tfvars` hoặc `*.auto.tfvars`. Giá trị **`default`** trong `variables.tf` là **phương án dự phòng cuối cùng**.
+        - Nếu vẫn **không tìm thấy `default`**, Terraform sẽ **yêu cầu nhập thủ công** (Interactive prompt).
+    - Trong **môi trường CI/CD**, việc **thiếu giá trị sẽ gây lỗi thực thi**.
+    - Khuyến khích đặt `default` cho các biến tùy chọn để tránh treo hệ thống. Còn biến nhạy cảm thì phải để người dùng nhập, không đặt `default`.
+    - Ví dụ: 
+        - `instance_type` đặt mặc định là `t2.micro` để luôn có máy chạy.
+        - `db_password` để trống để tránh lộ mật khẩu trong code và buộc phải truyền.
+
+---
+
+<br><br><br><br>
 
 ## LAB
 ### Lab01
@@ -79,13 +99,16 @@ $\text{Write Code} \rightarrow \text{init} \rightarrow \text{plan} \rightarrow \
     <br>
 </div>
 
+<br><br>
 
-### Lab02
+### Lab02: Tạo Terraform đơn giản
 
 <div align="center">
     <img src="imgs/lab02_.png" width="600">
     <br>
 </div>
+
+<br>
 
 - **B1:** 
     - **`cd .../sec03_terraform/lab02`** 
@@ -96,7 +119,29 @@ $\text{Write Code} \rightarrow \text{init} \rightarrow \text{plan} \rightarrow \
     - **`terraform apply`**
 - **B5-6:**
     - Thực hiện thay đổi `ami` của **resource "aws_instance" "lab-instance"**
+
+        <div align="center">
+            <img src="imgs/lab02_change_ami.png" width="600">
+            <br>
+        </div>
+
     - Sau đó chạy **`terraform apply`** để xem các hành động sẽ được thực hiện, sẽ thấy thông báo **`-/+` (destroy and replacement)** tạo instance mới - mất dữ liệu ổ đĩa gốc và thay đổi địa chỉ Public IP. 
     - Do đó cần đọc kĩ các thông báo **`-/+`** trong Production.
 - **B7:**
     - **`terraform destroy`**
+
+<br><br>
+
+## Lab03: Mapping Variable được khai báo trong **`variables.tf`** từ **`terraform.tfvars`**
+
+<div align="center">
+    <img src="imgs/lab03_.png" width="600">
+    <br>
+</div>
+
+<br>
+
+- **`cd .../sec03_terraform/lab03`** 
+- **`terraform init`**
+- **`terraform plan`** 
+- **`terraform apply`**
