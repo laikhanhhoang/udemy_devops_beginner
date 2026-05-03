@@ -1,0 +1,27 @@
+#######################################################
+# TERRAFORM GLOBAL IGNORE 
+#######################################################
+
+# --- Thư mục cài đặt (Rất nặng) ---
+**/.terraform/
+
+# --- File trạng thái (Data nhạy cảm) ---
+# Chặn tất cả file .tfstate ở bất kỳ thư mục con nào
+**/*.tfstate
+**/*.tfstate.*
+
+# --- File biến (Chứa mật khẩu, Access Key) ---
+**/*.tfvars
+**/*.tfvars.json
+
+# --- Các file Plan (Dùng để thực thi nhanh) ---
+**/*.tfplan
+
+# --- File cấu hình cá nhân & Log ---
+**/*.log
+**/.terraformrc
+**/terraform.rc
+
+# --- File nhạy cảm của hệ điều hành ---
+.DS_Store
+Thumbs.db

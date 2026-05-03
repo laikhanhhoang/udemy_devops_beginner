@@ -57,3 +57,15 @@ $\text{Write Code} \rightarrow \text{init} \rightarrow \text{plan} \rightarrow \
     <img src="imgs/terraform_component.png" width="600">
     <br>
 </div>
+
+
+## 3. Lưu ý
+- Khi thực hiện **`terraform apply`**, hãy chú ý ký hiệu **-/+ (destroy and replacement)**.
+    - Luôn kiểm tra dòng **(forces replacement)** trong `plan` để **tránh mất dịch vụ**.
+    - Kiểm tra log thực thi script tại file `/var/log/cloud-init-output.log`.
+    - Ví dụ: Thay đổi `user_data` hoặc `ami` sẽ khiến Terraform xóa và tạo mới Instance hoàn toàn.  Hành động này gây mất dữ liệu ổ đĩa gốc và thay đổi địa chỉ Public IP.
+
+    <div align="center">
+        <img src="imgs/lab02_change_ami.png" width="600">
+        <br>
+    </div>
