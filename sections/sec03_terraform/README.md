@@ -1,6 +1,6 @@
 # Sec03: Terraform - Infrastructure as Code (IaC)
 
-## 1.Infrastructure as Code
+## 1. Infrastructure as Code
 ### 1.1. Định nghĩa Infrastructure as Code (IaC)
 
 **Infrastructure as Code (IaC)** là phương pháp quản lý và cung cấp hạ tầng CNTT thông qua các tệp tin cấu hình (mã nguồn) thay vì thực hiện các thao tác cấu hình thủ công hoặc sử dụng các công cụ tương tác trực tiếp trên giao diện.
@@ -38,7 +38,7 @@
 ### 2.1. Cơ chế hoạt động của Terraform
 
 -   **Khởi tạo (Init) - `terraform init`**: Terraform thực hiện **tải các Plugins/Providers** cần thiết và **thiết lập thư mục làm việc** để sẵn sàng kết nối với Cloud.
--   **Kế hoạch (Plan) - `terraform plan`**: Terraform lấy code bạn viết **so sánh với trạng thái thực tế** $\rightarrow$ **Tạo bản kế hoạch** những gì sẽ được **thêm, sửa, hoặc xóa**.
+-   **Kế hoạch (Plan) - `terraform plan`**: Terraform **tự quét** qua các file **.tf** code bạn viết **so sánh với trạng thái thực tế** $\rightarrow$ **Tạo bản kế hoạch** những gì sẽ được **thêm, sửa, hoặc xóa**. Nó đủ thông minh để biết thứ tự tạo ra các resource.
 -   **Thực thi (Apply) - `terraform apply`**: Terraform gửi các yêu cầu đến **API của nhà cung cấp Cloud** $\rightarrow$ **Triển khai hạ tầng** đúng như bản kế hoạch đã phê duyệt.
     -   **Lưu trữ (State) - `.tfstate`**: Terraform tự động **ghi nhớ thông số hạ tầng** vào tệp trạng thái $\rightarrow$ Làm căn cứ duy nhất để **đối chiếu và quản lý** cho các lần thay đổi sau.
 -   **Hủy bỏ (Destroy) - `terraform destroy`**: Terraform đối chiếu tệp State để **xác định các tài nguyên** hiện có $\rightarrow$ **Xóa bỏ toàn bộ hạ tầng** đã được quản lý bởi cấu hình đó.
@@ -69,3 +69,34 @@ $\text{Write Code} \rightarrow \text{init} \rightarrow \text{plan} \rightarrow \
         <img src="imgs/lab02_change_ami.png" width="600">
         <br>
     </div>
+
+
+## LAB
+### Lab01
+
+<div align="center">
+    <img src="imgs/lab01_.png" width="600">
+    <br>
+</div>
+
+
+### Lab02
+
+<div align="center">
+    <img src="imgs/lab02_.png" width="600">
+    <br>
+</div>
+
+- **B1:** 
+    - **`cd .../sec03_terraform/lab02`** 
+    - **`ssh-keygen -t rsa -b 4096 -C "laikhanhhoang3011@gmail.com"`** $\rightarrow$ `#Path for key: ./keypair/udemy-devops-sec03-lab02-key`
+- **B2-3-4:**
+    - **`terraform init`**
+    - **`terraform plan`** **tự động làm các việc**: **quét** qua các file `.tf` - **so sánh với state hiện tại** - **quản lý thứ tự** các resource sẽ được tạo/chỉnh sửa/xóa.
+    - **`terraform apply`**
+- **B5-6:**
+    - Thực hiện thay đổi `ami` của **resource "aws_instance" "lab-instance"**
+    - Sau đó chạy **`terraform apply`** để xem các hành động sẽ được thực hiện, sẽ thấy thông báo **`-/+` (destroy and replacement)** tạo instance mới - mất dữ liệu ổ đĩa gốc và thay đổi địa chỉ Public IP. 
+    - Do đó cần đọc kĩ các thông báo **`-/+`** trong Production.
+- **B7:**
+    - **`terraform destroy`**
